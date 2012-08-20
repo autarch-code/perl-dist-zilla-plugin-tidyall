@@ -1,7 +1,50 @@
 package Dist::Zilla::Plugin::TidyAll;
-use 5.008;
-use strict;
-use warnings;
+use Cwd qw(realpath);
+use Code::TidyAll;
+use Moose;
+with 'Dist::Zilla::Role::FileMunger';
+
+has 'mode'        => ( is => 'ro', default => 'dzil' );
+has 'tidyall'     => ( is => 'ro', init_arg => undef, lazy_build => 1 );
+has 'tidyall_ini' => ( is => 'ro', lazy_build => 1 );
+
+sub _build_tidyall_ini {
+    my ($self) = @_;
+
+    my $root_dir = realpath( $self->zilla->root->stringify );
+    return "$root_dir/tidyall.ini";
+}
+
+sub _build_tidyall {
+    my ($self) = @_;
+
+    return Code::TidyAll->new_from_conf_file(
+        $self->tidyall_ini,
+        mode       => $self->mode,
+        no_cache   => 1,
+        no_backups => 1
+    );
+}
+
+sub munge_file {
+    my ( $self, $file ) = @_;
+
+    return if ref($file) eq 'Dist::Zilla::File::FromCode';
+
+    my $source = $file->content;
+    my $path   = $file->name;
+    my $result = $self->tidyall->process_source( $source, $path );
+    if ( $result->error ) {
+        die $result->msg;
+    }
+    elsif ( $result->state eq 'tidied' ) {
+        my $destination = $result->new_contents;
+        $file->content($destination);
+    }
+}
+
+__PACKAGE__->meta->make_immutable;
+no Moose;
 
 1;
 
@@ -15,27 +58,22 @@ Dist::Zilla::Plugin::TidyAll - Apply tidyall to files in Dist::Zilla
 
 =head1 SYNOPSIS
 
-    use Dist::Zilla::Plugin::TidyAll;
+    # dist.ini
+    [TidyAll]
+
+    # or
+    [TidyAll]
+    tidyall_ini = /path/to/tidyall.ini
 
 =head1 DESCRIPTION
 
-Dist::Zilla::Plugin::TidyAll provides
+Processes each file with L<tidyall|tidyall>, via the
+L<Dist::Zilla::Role::FileMunger|Dist::Zilla::Role::FileMunger> role.
 
-Questions and feedback are welcome, and should be directed to the mailing list:
-
-    http://groups.google.com/...
-
-Bugs and feature requests will be tracked at RT:
-
-    http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-Zilla-Plugin-TidyAll
-    bug-dist-zilla-plugin-tidyall@rt.cpan.org
-
-The latest source code can be browsed and fetched at:
-
-    http://github.com/jonswar/perl-dist-zilla-plugin-tidyall
-    git clone git://github.com/jonswar/perl-dist-zilla-plugin-tidyall.git
+You may specify the path to the tidyall.ini; otherwise it is expected to be in
+the dzil root (same as dist.ini).
 
 =head1 SEE ALSO
 
-L<Some::Module>
+L<tidyall|tidyall>
 
