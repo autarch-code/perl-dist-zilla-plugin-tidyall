@@ -6,7 +6,10 @@ our $VERSION = '0.04';
 
 use Cwd qw(realpath);
 use Code::TidyAll;
-with 'Dist::Zilla::Role::FileMunger';
+with qw(
+    Dist::Zilla::Role::FileMunger
+    Dist::Zilla::Role::PrereqSource
+);
 
 has 'mode'        => ( is => 'ro', default    => 'dzil' );
 has 'tidyall'     => ( is => 'ro', init_arg   => undef, lazy_build => 1 );
@@ -28,6 +31,19 @@ sub _build_tidyall {
         no_cache   => 1,
         no_backups => 1
     );
+}
+
+sub register_prereqs {
+    my ($self) = @_;
+
+    $self->zilla->register_prereqs({
+            type  => 'requires',
+            phase => 'develop',
+        },
+        'Code::TidyAll' => '0',
+    );
+
+    return;
 }
 
 sub munge_file {
