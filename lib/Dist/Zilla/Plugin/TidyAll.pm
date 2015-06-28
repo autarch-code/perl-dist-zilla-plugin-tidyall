@@ -2,7 +2,7 @@ package Dist::Zilla::Plugin::TidyAll;
 
 use Moose;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use Cwd qw(realpath);
 use Code::TidyAll;
