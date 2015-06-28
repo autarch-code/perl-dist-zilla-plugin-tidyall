@@ -8,8 +8,8 @@ use Cwd qw(realpath);
 use Code::TidyAll;
 with 'Dist::Zilla::Role::FileMunger';
 
-has 'mode'        => ( is => 'ro', default => 'dzil' );
-has 'tidyall'     => ( is => 'ro', init_arg => undef, lazy_build => 1 );
+has 'mode'        => ( is => 'ro', default    => 'dzil' );
+has 'tidyall'     => ( is => 'ro', init_arg   => undef, lazy_build => 1 );
 has 'tidyall_ini' => ( is => 'ro', lazy_build => 1 );
 
 sub _build_tidyall_ini {
