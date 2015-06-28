@@ -36,7 +36,8 @@ sub _build_tidyall {
 sub register_prereqs {
     my ($self) = @_;
 
-    $self->zilla->register_prereqs({
+    $self->zilla->register_prereqs(
+        {
             type  => 'requires',
             phase => 'develop',
         },
@@ -69,6 +70,7 @@ no Moose;
 1;
 
 __END__
+
 
 =pod
 
