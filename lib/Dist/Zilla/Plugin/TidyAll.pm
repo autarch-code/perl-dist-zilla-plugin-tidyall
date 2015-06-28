@@ -55,7 +55,7 @@ sub munge_file {
     my $path   = $file->name;
     my $result = $self->tidyall->process_source( $source, $path );
     if ( $result->error ) {
-        die $result->error;
+        die $result->error . "\n";
     }
     elsif ( $result->state eq 'tidied' ) {
         my $destination = $result->new_contents;
