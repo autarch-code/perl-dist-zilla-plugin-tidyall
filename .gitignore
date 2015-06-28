@@ -1,5 +1,6 @@
 .build
 .tidyall.d
+Dist-Zilla-Plugin-TidyAll-*
 NOTES
 TODO
 bench
