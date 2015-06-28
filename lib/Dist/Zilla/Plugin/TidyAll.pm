@@ -1,7 +1,11 @@
 package Dist::Zilla::Plugin::TidyAll;
+
+use Moose;
+
+our $VERSION = '0.04';
+
 use Cwd qw(realpath);
 use Code::TidyAll;
-use Moose;
 with 'Dist::Zilla::Role::FileMunger';
 
 has 'mode'        => ( is => 'ro', default => 'dzil' );
