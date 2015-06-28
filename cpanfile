@@ -1,6 +1,7 @@
 requires "Code::TidyAll" => "0";
 requires "Cwd" => "0";
 requires "Dist::Zilla::Role::FileMunger" => "0";
+requires "Dist::Zilla::Role::PrereqSource" => "0";
 requires "Moose" => "0";
 
 on 'test' => sub {

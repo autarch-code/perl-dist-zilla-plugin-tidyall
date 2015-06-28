@@ -20,6 +20,7 @@ my %WriteMakefileArgs = (
     "Code::TidyAll" => 0,
     "Cwd" => 0,
     "Dist::Zilla::Role::FileMunger" => 0,
+    "Dist::Zilla::Role::PrereqSource" => 0,
     "Moose" => 0
   },
   "TEST_REQUIRES" => {
@@ -40,6 +41,7 @@ my %FallbackPrereqs = (
   "Code::TidyAll" => 0,
   "Cwd" => 0,
   "Dist::Zilla::Role::FileMunger" => 0,
+  "Dist::Zilla::Role::PrereqSource" => 0,
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
   "Moose" => 0,
